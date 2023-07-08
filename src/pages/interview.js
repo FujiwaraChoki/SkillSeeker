@@ -69,7 +69,8 @@ const Interview = () => {
     const currentQuestion = questions[currentQuestionIndex];
 
     if (!browserSupportsSpeechRecognition) {
-        return <p>Browser doesn't support speech recognition.</p>;
+        // return centered image
+        return <img src="/not-supported.png" className="mx-auto" />;
     }
 
     return (
