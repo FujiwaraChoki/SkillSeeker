@@ -21,7 +21,7 @@ const Interview = () => {
         if (questions.length === 0) {
             console.log(jobTitle);
             const generateQuestions = async () => {
-                const response = await fetch('/api/genQuestions', {
+                const response = await fetch('https://skillseeker.vercel.app/api/genQuestions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
