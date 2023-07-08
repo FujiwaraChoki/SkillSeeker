@@ -23,7 +23,7 @@ const Interview = () => {
             console.log(jobTitle);
             const generateQuestions = async () => {
                 try {
-                    const response = await fetch('https://skillseeker.vercel.app/api/genQuestions', {
+                    const response = await fetch('/api/genQuestions', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
