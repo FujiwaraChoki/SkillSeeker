@@ -70,7 +70,16 @@ const Interview = () => {
 
     if (!browserSupportsSpeechRecognition) {
         // return centered image
-        return <img src="/not-supported.png" className="mx-auto m-10" />;
+        return (
+            <>
+                <img src="/not-supported.png" className="mx-auto m-10" />
+                <h1 className="text-3xl text-center font-bold mb-4">
+                    Your browser does not support Speech Recognition{' '}
+                    <span role="img" aria-label="Sad Emoji">
+                        😢
+                    </span>
+                </h1>
+            </>);
     }
 
     return (
