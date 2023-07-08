@@ -1,7 +1,8 @@
 const handler = async (req, res) => {
-    console.log(req.body);
+    // Get query parameter: code
+    const { code } = req.query;
 
-    res.status(200).json({ name: 'John Doe' });
+    res.status(200).json({ code: code });
 };
 
 export default handler;
