@@ -70,7 +70,7 @@ const Interview = () => {
 
     if (!browserSupportsSpeechRecognition) {
         // return centered image
-        return <img src="/not-supported.png" className="mx-auto" />;
+        return <img src="/not-supported.png" className="mx-auto m-10" />;
     }
 
     return (
