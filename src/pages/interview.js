@@ -22,21 +22,25 @@ const Interview = () => {
         if (questions.length === 0) {
             console.log(jobTitle);
             const generateQuestions = async () => {
-                const response = await fetch('https://skillseeker.vercel.app/api/genQuestions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        jobTitle,
-                        qualities,
-                        apiKey: atob(apiKey),
-                    }),
-                });
+                try {
+                    const response = await fetch('https://skillseeker.vercel.app/api/genQuestions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            jobTitle,
+                            qualities,
+                            apiKey: atob(apiKey),
+                        }),
+                    });
 
-                const generatedQuestions = await response.json();
-                console.log(generatedQuestions);
-                setQuestions(generatedQuestions);
+                    const generatedQuestions = await response.json();
+                    console.log(generatedQuestions);
+                    setQuestions(generatedQuestions);
+                } catch (error) {
+                    console.log(error);
+                }
             };
 
             generateQuestions();
