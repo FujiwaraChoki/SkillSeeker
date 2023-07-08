@@ -10,8 +10,9 @@ const handler = async (req, res) => {
     // Call your ChatGPT API here to generate questions
     const prompt = `Generate questions for a Job Interview.We want to know if the candidate is a good fit for the job.
         Generate Questions based on these qualities: ${qualities.join(', ')}
+        We are currently hiring for the position of ${jobTitle}.
 
-            We are currently hiring for the position of ${jobTitle}.
+        Please send it to me in pure text with just the array, no comment from your side.
 
         Give me the questions in a JSON Array.`;
     try {
