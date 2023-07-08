@@ -11,7 +11,7 @@ const Interview = () => {
     const [userAnswers, setUserAnswers] = useState([]);
     const apiKey = router.query.apiKey || '';
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const {
+    let {
         transcript,
         listening,
         resetTranscript,
@@ -23,7 +23,7 @@ const Interview = () => {
             console.log(jobTitle);
             const generateQuestions = async () => {
                 try {
-                    const response = await fetch('/api/genQuestions', {
+                    const response = await fetch('https://skillseeker.vercel.app/api/genQuestions', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -62,12 +62,15 @@ const Interview = () => {
     const handleNextQuestion = () => {
         if (transcript !== '') {
             handleSaveAnswer();
+            transcript = '';
         }
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     };
 
     const handlePreviousQuestion = () => {
-        setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+        if (currentQuestionIndex > 0) {
+            setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+        }
     };
 
     const containerVariants = {
@@ -89,6 +92,10 @@ const Interview = () => {
                     </span>
                 </h1>
             </>);
+    }
+
+    if (currentQuestionIndex < 0 || currentQuestionIndex >= questions.length) {
+        return <div>Invalid question index</div>;
     }
 
     return (
