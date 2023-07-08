@@ -35,7 +35,7 @@ const HomePage = () => {
     const encodedJobTitle = encodeURIComponent(jobTitle);
     // Base64 encode api key
     const encodedOpenAIKey = btoa(openAIKey);
-    router.push(`/interview?jobTitle=${encodedJobTitle}&qualities=${qualitiesString}&apiKey=encodedOpenAIKey`);
+    router.push(`/interview?jobTitle=${encodedJobTitle}&qualities=${qualitiesString}&apiKey=${encodedOpenAIKey}`);
   };
 
   return (
