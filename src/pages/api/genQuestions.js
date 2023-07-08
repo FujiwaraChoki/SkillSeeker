@@ -3,7 +3,7 @@ const handler = async (req, res) => {
         return res.status(405).json({ error: 'Method not allowed, please use POST' });
     }
 
-    const { jobTitle, qualities } = req.body;
+    const { jobTitle, qualities, apiKey } = req.body;
 
     console.log('Creating questions for job title:', jobTitle);
 
@@ -20,7 +20,7 @@ const handler = async (req, res) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.API_KEY}`,
+                'Authorization': `Bearer ${apiKey}`,
             },
             body: JSON.stringify({
                 messages: [{ "role": "system", "content": "You are an H.R. Recruiter for the position" + jobTitle }, { "role": "user", "content": prompt }],

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 const HomePage = () => {
   const [jobTitle, setJobTitle] = useState('');
   const [qualities, setQualities] = useState(['']);
+  const [openAIKey, setOpenAIKey] = useState('');
 
   const router = useRouter();
 
@@ -32,7 +33,9 @@ const HomePage = () => {
   const startInterview = () => {
     const qualitiesString = qualities.join(',');
     const encodedJobTitle = encodeURIComponent(jobTitle);
-    router.push(`/interview?jobTitle=${encodedJobTitle}&qualities=${qualitiesString}`);
+    // Base64 encode api key
+    const encodedOpenAIKey = btoa(openAIKey);
+    router.push(`/interview?jobTitle=${encodedJobTitle}&qualities=${qualitiesString}&apiKey=encodedOpenAIKey`);
   };
 
   return (
@@ -73,6 +76,25 @@ const HomePage = () => {
         placeholder="Enter a job-title"
         value={jobTitle}
         onChange={(e) => setJobTitle(e.target.value)}
+      />
+
+      <motion.h2
+        className="text-2xl text-center mb-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.2 } }}
+      >
+        What is your OpenAI API key?{' '}
+        <span role="img" aria-label="Quality Emoji">
+          ❓
+        </span>
+      </motion.h2>
+
+      <input
+        type="text"
+        className="mb-6 w-full p-2 border rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter your OpenAI API key..."
+        value={openAIKey}
+        onChange={(e) => setOpenAIKey(e.target.value)}
       />
 
       <motion.h2

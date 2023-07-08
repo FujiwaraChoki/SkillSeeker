@@ -9,6 +9,7 @@ const Interview = () => {
     const qualities = router.query.qualities?.split(',') || [];
     const [questions, setQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState([]);
+    const apiKey = router.query.apiKey || '';
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const {
         transcript,
@@ -26,7 +27,11 @@ const Interview = () => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ jobTitle, qualities }),
+                    body: JSON.stringify({
+                        jobTitle,
+                        qualities,
+                        apiKey: atob(apiKey),
+                    }),
                 });
 
                 const generatedQuestions = await response.json();
