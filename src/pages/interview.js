@@ -1,6 +1,7 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 const Interview = () => {
@@ -9,8 +10,10 @@ const Interview = () => {
     const qualities = router.query.qualities?.split(',') || [];
     const [questions, setQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState([]);
-    const apiKey = router.query.apiKey || '';
+    const [isLoading, setIsLoading] = useState(true);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [apiKey, setApiKey] = useState();
+
     let {
         transcript,
         listening,
@@ -19,11 +22,24 @@ const Interview = () => {
     } = useSpeechRecognition();
 
     useEffect(() => {
+        if (localStorage.getItem('apiKey')) {
+            setApiKey(localStorage.getItem('apiKey'));
+        } else {
+            alert('API Key not found. Please provide an API Key.');
+        }
+
+        if (!apiKey) {
+            // If apiKey is not available, handle it accordingly (e.g., show a message)
+            toast.error('API Key not found. Please provide an API Key.');
+            setIsLoading(false); // Set loading to false
+            return;
+        }
+
+        // Fetch questions when apiKey is available
         if (questions.length === 0) {
-            console.log(jobTitle);
             const generateQuestions = async () => {
                 try {
-                    const response = await fetch('https://skillseeker.vercel.app/api/genQuestions', {
+                    const response = await fetch('/api/genQuestions', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -36,16 +52,17 @@ const Interview = () => {
                     });
 
                     const generatedQuestions = await response.json();
-                    console.log(generatedQuestions);
                     setQuestions(generatedQuestions);
+                    setIsLoading(false); // Set loading to false when questions are loaded
                 } catch (error) {
-                    console.log(error);
+                    console.error(error);
+                    setIsLoading(false); // Set loading to false in case of an error
                 }
             };
 
             generateQuestions();
         }
-    }, []); // <-- Empty dependency array to run the effect only once
+    }, [apiKey, jobTitle, qualities, questions]);
 
     const handleSaveAnswer = () => {
         const answer = transcript;
@@ -62,7 +79,7 @@ const Interview = () => {
     const handleNextQuestion = () => {
         if (transcript !== '') {
             handleSaveAnswer();
-            transcript = '';
+            resetTranscript(); // Reset transcript after saving answer
         }
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     };
@@ -80,6 +97,21 @@ const Interview = () => {
 
     const currentQuestion = questions[currentQuestionIndex];
 
+    if (isLoading) {
+        // Display a loading animation while questions are being generated
+        return (
+            <div className="text-center">
+                <motion.div
+                    className="spinner" // You can style this spinner as needed
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                >
+                    Loading...
+                </motion.div>
+            </div>
+        );
+    }
+
     if (!browserSupportsSpeechRecognition) {
         // return centered image
         return (
@@ -91,15 +123,18 @@ const Interview = () => {
                         😢
                     </span>
                 </h1>
-            </>);
-    }
-
-    if (currentQuestionIndex < 0 || currentQuestionIndex >= questions.length) {
-        return <div>Invalid question index</div>;
+            </>
+        );
     }
 
     return (
         <div className="container mx-auto px-4 py-8">
+            <Toaster
+                position="bottom-right"
+                toastOptions={{
+                    duration: 5000,
+                }}
+            />
             <h1 className="text-3xl text-center font-bold mb-4">
                 A.I. Recruiter Interview{' '}
                 <span role="img" aria-label="AI Emoji">

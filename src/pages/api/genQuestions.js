@@ -27,6 +27,7 @@ const handler = async (req, res) => {
                 model: 'gpt-3.5-turbo'
             }),
         }).then((response) => response.json());
+        console.log(gptResponse);
         console.log(gptResponse.choices[0].message.content);
 
         try {

@@ -35,7 +35,10 @@ const HomePage = () => {
     const encodedJobTitle = encodeURIComponent(jobTitle);
     // Base64 encode api key
     const encodedOpenAIKey = btoa(openAIKey);
-    router.push(`/interview?jobTitle=${encodedJobTitle}&qualities=${qualitiesString}&apiKey=${encodedOpenAIKey}`);
+    router.push(`/interview?jobTitle=${encodedJobTitle}&qualities=${qualitiesString}`);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('apiKey', encodedOpenAIKey);
+    }
   };
 
   return (
@@ -64,7 +67,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.2 } }}
       >
-        What is the job-title?{' '}
+        What is the job-title{' '}
         <span role="img" aria-label="Quality Emoji">
           ❓
         </span>
@@ -83,14 +86,14 @@ const HomePage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.2 } }}
       >
-        What is your OpenAI API key?{' '}
+        What is your OpenAI API key (dont worry, it's encoded){' '}
         <span role="img" aria-label="Quality Emoji">
           ❓
         </span>
       </motion.h2>
 
       <input
-        type="text"
+        type="password"
         className="mb-6 w-full p-2 border rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder="Enter your OpenAI API key..."
         value={openAIKey}
@@ -102,7 +105,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.2 } }}
       >
-        What qualities would you like to have in your employee?{' '}
+        What qualities would you like to have in your employee{' '}
         <span role="img" aria-label="Quality Emoji">
           ❓
         </span>
